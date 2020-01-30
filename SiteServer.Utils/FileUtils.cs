@@ -57,6 +57,12 @@ namespace SiteServer.Utils
         {
             DirectoryUtils.CreateDirectoryIfNotExists(filePath);
 
+            //检测文件是否改变，如果未改变，则不用重现覆盖重写文件
+            if (System.IO.File.Exists(filePath) && System.IO.File.ReadAllText(filePath, encoding) == content) {
+                return;
+            }
+
+
             byte[] encodedText = encoding.GetBytes(content);
 
             using (FileStream sourceStream = new FileStream(filePath,
